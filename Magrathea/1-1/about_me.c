@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 
 int main() {
     printf("[마그라테아] ♥♥ 프로젝트 맴버 소개 ♥♥\n");
