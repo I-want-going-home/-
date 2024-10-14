@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NUM_CANDIDATES 2
+#define NUM_CANDIDATES 6
 #define ATTRIBUTES 12
 
 const char* membercount[] = {"Ã¹", "µÎ", "¼¼", "³×", "´Ù¼¸", "¿©¼¸"};
