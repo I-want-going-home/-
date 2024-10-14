@@ -1,30 +1,161 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>  // ÇöÀç ½Ã°£ °ü·Ã ÇÔ¼ö »ç¿ëÀ» À§ÇØ Ãß°¡
 
-void star() {
-    const char* lines[] = {
-        "                           [ë§ˆê·¸ë¼í…Œì•„ ver 0.1]                                 ",
-        "         í’€ í•œ í¬ê¸° ì—†ëŠ” í™©ë¬´ì§€ì—ì„œ ë°˜ì§ì´ëŠ” í–‰ì„±ì„ ë§Œë“œëŠ” ê³³ ë§ˆê·¸ë¼í…Œì•„,       ",
-        "      ì‚¬ëŒë“¤ì´ ë³´ì§€ ëª»í•˜ëŠ” ì ì¬ë ¥ì„ ì°¾ê³  ì „ë¬¸ê°€ì˜ ì†ê¸¸ì„ ë”í•´ ë³´ì„ì„ ë¹›ë‚˜ëŠ” ê³³, ",
-        "                      ë§ˆê·¸ë¼í…Œì•„ì— ì˜¤ì‹ ê±¸ í™˜ì˜í•©ë‹ˆë‹¤.                           ",
-        "                                                                                "
-    };
+#define NUM_CANDIDATES 2
+const char* membercount[] = {"Ã¹", "µÎ", "¼¼", "³×", "´Ù¼¸", "¿©¼¸"};
 
-    printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+// ÈÄº¸ÀÚ Á¤º¸¸¦ ÀúÀåÇÏ±â À§ÇÑ ±¸Á¶Ã¼ Á¤ÀÇ
+typedef struct {
+    char name[50];            // ¼º¸í
+    char birth[11];           // »ıÀÏ
+    char gender;              // ¼ºº°
+    char email[100];          // ¸ŞÀÏ ÁÖ¼Ò
+    char nationality[50];     // ±¹Àû
+    float bmi;                // BMI
+    char main_skill[50];      // ÁÖ ½ºÅ³
+    char sub_skill[50];       // º¸Á¶ ½ºÅ³
+    char korean_level[10];    // ÇÑ±¹¾î µî±Ş
+    char mbti[10];            // MBTI
+    char introduction[200];   // ¼Ò°³
+    char group_name[50];      // ¿Àµğ¼Ç ±×·ì¸í
+} Candidate;
 
-    // ë³„ì„ ì €ì¥í•  ë°°ì—´
-    const char* stars[] = { "*****", "****", "***", "**", "*", "" };
+// ¸¸ ³ªÀÌ¸¦ °è»êÇÏ´Â ÇÔ¼ö
+int calculate_age(char *birth) {
+    int birth_year, birth_month, birth_day;
+    int current_year, current_month, current_day;
+    sscanf(birth, "%4d/%2d/%2d", &birth_year, &birth_month, &birth_day);
 
-    // iëŠ” lines ë°°ì—´ ì¸ë±ìŠ¤ë¥¼ ì¡°ì •
-    for (int i = 0; i < 5; i++) {  // linesì˜ í¬ê¸°ê°€ 6ì´ë¯€ë¡œ ë§ˆì§€ë§‰ ì¤„ì„ ì œì™¸í•˜ê³  i < 5ë¡œ ì„¤ì •
-        // ê° ì¤„ì˜ ì•ê³¼ ë’¤ì— ë³„ì„ ì¶”ê°€
-        printf("%s%s%s\n", stars[4 - i], lines[i], stars[i]);
+    // ÇöÀç ³¯Â¥¸¦ ±¸ÇÏ±â À§ÇØ time.h ¶óÀÌºê·¯¸® »ç¿ë
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    current_year = tm.tm_year + 1900;  // tm_year´Â 1900³âÀ» ±âÁØÀ¸·Î ÇÏ¹Ç·Î 1900À» ´õÇØÁà¾ß ÇÔ
+    current_month = tm.tm_mon + 1;     // tm_monÀº 0ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î 1À» ´õÇØÁà¾ß ÇÔ
+    current_day = tm.tm_mday;
+
+    int age = current_year - birth_year;
+
+    // »ıÀÏÀÌ ¾ÆÁ÷ Áö³ªÁö ¾Ê¾ÒÀ¸¸é ³ªÀÌ¸¦ 1»ì »©¾ß ÇÔ
+    if (current_month < birth_month || (current_month == birth_month && current_day < birth_day)) {
+        age--;
     }
 
-    printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    return age;
 }
 
 int main() {
-    star();
+    Candidate candidates[NUM_CANDIDATES];  // ÈÄº¸ÀÚ Á¤º¸¸¦ ÀúÀåÇÒ ¹è¿­
+    int i = 0;
+
+    // ÈÄº¸ÀÚ µ¥ÀÌÅÍ¸¦ ÀÔ·Â¹ŞÀ½
+    while (i < NUM_CANDIDATES) {
+        printf("¿Àµğ¼Ç ±×·ì¸í: ");
+        scanf("%s", candidates[i].group_name);
+
+        printf("####################################\n");
+        printf("[%s] ¿Àµğ¼Ç ÈÄº¸ÀÚ µ¥ÀÌÅÍ ÀÔ·Â\n", candidates[i].group_name);
+        printf("####################################\n");
+        printf("%s¹øÂ° ÈÄº¸ÀÚÀÇ Á¤º¸¸¦ ÀÔ·ÂÇÕ´Ï´Ù.\n", membercount[i]);
+        printf("---------------------------------\n");
+
+        printf("1. ¼º¸í: ");
+        scanf("%s", candidates[i].name);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("2. »ıÀÏ(YYYY/MM/DD Çü½Ä): ");
+        scanf("%s", candidates[i].birth);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("3. ¼ºº°(¿©¼ºÀÌ¸é F ¶Ç´Â ³²¼ºÀÌ¸é M): ");
+        scanf(" %c", &candidates[i].gender);  // °ø¹éÀ» ³Ö¾î ¹öÆÛ ºñ¿ò
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("4. ¸ŞÀÏ ÁÖ¼Ò: ");
+        scanf("%s", candidates[i].email);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("5. ±¹Àû: ");
+        scanf("%s", candidates[i].nationality);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("6. BMI: ");
+        scanf("%f", &candidates[i].bmi);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("7. ÁÖ ½ºÅ³: ");
+        scanf("%s", candidates[i].main_skill);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("8. º¸Á¶ ½ºÅ³: ");
+        scanf("%s", candidates[i].sub_skill);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("9. ÇÑ±¹¾î µî±Ş(TOPIK): ");
+        scanf("%s", candidates[i].korean_level);
+        getchar();  // ¹öÆÛ ºñ¿ì±â
+
+        printf("10. MBTI: ");
+        scanf("%s", candidates[i].mbti);
+        getchar();  // ¹öÆÛ ºñ¿ì
+
+        printf("11. ¼Ò°³: ");
+        fgets(candidates[i].introduction, sizeof(candidates[i].introduction), stdin);  // ¼Ò°³´Â °ø¹é Æ÷ÇÔ ÀÔ·ÂÀ» ¹Ş±â À§ÇØ fgets »ç¿ë
+
+        printf("=================================\n");
+
+        i++;  // ´ÙÀ½ ÈÄº¸ÀÚ·Î ÀÌµ¿
+    }
+
+    // ÈÄº¸ÀÚ µ¥ÀÌÅÍ Ãâ·Â
+    for (i = 0; i < NUM_CANDIDATES; i++) {
+        printf("####################################\n");
+        printf("[%s] ¿Àµğ¼Ç ÈÄº¸ÀÚ µ¥ÀÌÅÍ Á¶È¸\n", candidates[i].group_name);
+        printf("####################################\n");
+        printf("================================================================================================\n");
+        printf("¼º   ¸í |  »ı   ÀÏ  | ¼º º° |       ¸Ş   ÀÏ      | ±¹Àû | BMI | ÁÖ½ºÅ³ | º¸Á¶½ºÅ³ | TOPIK | MBTI |\n");
+        printf("================================================================================================\n");
+
+        // »ıÀÏ¿¡¼­ '/'¸¦ Á¦°ÅÇÏ´Â ºÎºĞ
+        char formatted_birth[11];  // YYYYMMDD Çü½ÄÀ¸·Î º¯È¯µÈ »ıÀÏÀ» ÀúÀåÇÒ ¹è¿­
+        int j = 0;
+        for (int k = 0; k < 10; k++) {
+            if (candidates[i].birth[k] != '/') {
+                formatted_birth[j++] = candidates[i].birth[k];
+            }
+        }
+        formatted_birth[j] = '\0';  // ¹®ÀÚ¿­ ³¡À» ³ªÅ¸³»´Â ³Î ¹®ÀÚ Ãß°¡
+
+        // ¼ºº° Ãâ·Â ½Ã 'if' ¹® »ç¿ë
+        char gender_str[3] = "?";  // ±âº» °ªÀº '?'
+        if (candidates[i].gender == 'F' || candidates[i].gender == 'f') {
+            snprintf(gender_str, sizeof(gender_str), "¿©");
+        } else if (candidates[i].gender == 'M' || candidates[i].gender == 'm') {
+            snprintf(gender_str, sizeof(gender_str), "³²");
+        }
+
+        // ¸¸ ³ªÀÌ °è»ê
+        int age = calculate_age(candidates[i].birth);
+
+        // Ãâ·Â Çü½Ä¿¡ ¸Â°Ô µ¥ÀÌÅÍ Ãâ·Â
+        printf("%s(%d)  |%s | %s   | %s | %s | %.1f | %s | %s | %s | %s |\n",
+            candidates[i].name,
+            age,  // ¸¸ ³ªÀÌ Ãâ·Â
+            formatted_birth,  // ¼öÁ¤µÈ »ıÀÏ Ãâ·Â
+            gender_str,
+            candidates[i].email,
+            candidates[i].nationality,
+            candidates[i].bmi,
+            candidates[i].main_skill,
+            candidates[i].sub_skill,
+            candidates[i].korean_level,
+            candidates[i].mbti
+        );
+        printf("---------------------------------------------------------------------------------------------\n");
+        printf("%s", candidates[i].introduction);
+        printf("---------------------------------------------------------------------------------------------\n");
+    }
+    while (getchar() != '\n');
+    getchar();
     return 0;
 }
