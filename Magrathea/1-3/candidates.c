@@ -13,7 +13,6 @@ int main() {
         printf("오디션 그룹명: ");
         fgets(candidates[i], sizeof(candidate01), stdin);
 
-        // 새줄 제거
         {
             int len = 0;
             while (candidates[i][len] != '\0') {
@@ -70,7 +69,6 @@ int main() {
 
             fgets(member_info[i][j], sizeof(member_info[i][j]), stdin);
 
-            // 새줄 제거
             {
                 int len = 0;
                 while (member_info[i][j][len] != '\0') {
