@@ -1,149 +1,142 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-#define NUM_CANDIDATES 2
+#define NUM_CANDIDATES 6
 #define ATTRIBUTES 12
 
-const char* membercount[] = {"첫", "두", "세", "네", "다섯", "여섯"};
-
-typedef struct {
-    char member_info[ATTRIBUTES][200];
-} Candidate;
-
-#pragma region 날짜, 만나이 계산, 공백 밑줄 삭제 함수
-
-int calculate_age(char *birth) {
-    int birth_year, birth_month, birth_day;
-    int current_year, current_month, current_day;
-    sscanf(birth, "%4d/%2d/%2d", &birth_year, &birth_month, &birth_day);
-
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-    current_year = tm->tm_year + 1900;
-    current_month = tm->tm_mon + 1;
-    current_day = tm->tm_mday;
-
-    int age = current_year - birth_year;
-
-    if (current_month < birth_month || (current_month == birth_month && current_day < birth_day)) {
-        age--;
-    }
-
-    return age;
-}
-
-void remove_newline(char *str) {
-    int len = 0;
-
-    while (str[len] != '\0') {
-        len++;
-    }
-
-    if (len > 0 && str[len - 1] == '\n') {
-        str[len - 1] = '\0';
-    }
-}
-
-#pragma endregion
-
 int main() {
-    Candidate candidates[NUM_CANDIDATES];
-    int i = 0;
+    char candidate01[200], candidate02[200], candidate03[200], candidate04[200], candidate05[200], candidate06[200];
+    char *candidates[NUM_CANDIDATES] = {candidate01, candidate02, candidate03, candidate04, candidate05, candidate06};
+    char member_info[NUM_CANDIDATES][ATTRIBUTES][200]; // 모든 후보자의 속성을 저장할 배열
 
-    while (i < NUM_CANDIDATES) {
+    for (int i = 0; i < NUM_CANDIDATES; i++) {
         printf("오디션 그룹명: ");
-        fgets(candidates[i].member_info[0], sizeof(candidates[i].member_info[0]), stdin);
-        remove_newline(candidates[i].member_info[0]);
+        fgets(candidates[i], sizeof(candidate01), stdin);
 
-        printf("####################################\n");
-        printf("[%s] 오디션 후보자 데이터 입력\n", candidates[i].member_info[0]);
-        printf("####################################\n");
-        printf("%s번째 후보자의 정보를 입력합니다.\n", membercount[i]);
-        printf("---------------------------------\n");
-
-        printf("1. 성명: ");
-        fgets(candidates[i].member_info[1], sizeof(candidates[i].member_info[1]), stdin);
-        remove_newline(candidates[i].member_info[1]);
-
-        printf("2. 생일(YYYY/MM/DD 형식): ");
-        fgets(candidates[i].member_info[2], sizeof(candidates[i].member_info[2]), stdin);
-        remove_newline(candidates[i].member_info[2]);
-
-        printf("3. 성별(여성이면 F 또는 남성이면 M): ");
-        fgets(candidates[i].member_info[3], sizeof(candidates[i].member_info[3]), stdin);
-        remove_newline(candidates[i].member_info[3]);
-
-        if (candidates[i].member_info[3][0] == 'F') {
-            snprintf(candidates[i].member_info[3], sizeof(candidates[i].member_info[3]), "여");
-        } else if (candidates[i].member_info[3][0] == 'M') {
-            snprintf(candidates[i].member_info[3], sizeof(candidates[i].member_info[3]), "남");
+        // 새줄 제거
+        {
+            int len = 0;
+            while (candidates[i][len] != '\0') {
+                len++;
+            }
+            if (len > 0 && candidates[i][len - 1] == '\n') {
+                candidates[i][len - 1] = '\0';
+            }
         }
 
-        printf("4. 메일 주소: ");
-        fgets(candidates[i].member_info[4], sizeof(candidates[i].member_info[4]), stdin);
-        remove_newline(candidates[i].member_info[4]);
+        printf("####################################\n");
+        printf("[%s] 오디션 후보자 데이터 입력\n", candidates[i]);
+        printf("####################################\n");
 
-        printf("5. 국적: ");
-        fgets(candidates[i].member_info[5], sizeof(candidates[i].member_info[5]), stdin);
-        remove_newline(candidates[i].member_info[5]);
+        int j = 0;
+        while (j < ATTRIBUTES) {
+            switch (j) {
+                case 0:
+                    printf("1. 성명: ");
+                    break;
+                case 1:
+                    printf("2. 생일(YYYY/MM/DD 형식): ");
+                    break;
+                case 2:
+                    printf("3. 성별(여성이면 F 또는 남성이면 M): ");
+                    break;
+                case 3:
+                    printf("4. 메일 주소: ");
+                    break;
+                case 4:
+                    printf("5. 국적: ");
+                    break;
+                case 5:
+                    printf("6. BMI: ");
+                    break;
+                case 6:
+                    printf("7. 주 스킬: ");
+                    break;
+                case 7:
+                    printf("8. 보조 스킬: ");
+                    break;
+                case 8:
+                    printf("9. 한국어 등급(TOPIK): ");
+                    break;
+                case 9:
+                    printf("10. MBTI: ");
+                    break;
+                case 10:
+                    printf("11. 소개: ");
+                    break;
+                default:
+                    break;
+            }
 
-        printf("6. BMI: ");
-        fgets(candidates[i].member_info[6], sizeof(candidates[i].member_info[6]), stdin);
-        remove_newline(candidates[i].member_info[6]);
+            fgets(member_info[i][j], sizeof(member_info[i][j]), stdin);
 
-        printf("7. 주 스킬: ");
-        fgets(candidates[i].member_info[7], sizeof(candidates[i].member_info[7]), stdin);
-        remove_newline(candidates[i].member_info[7]);
+            // 새줄 제거
+            {
+                int len = 0;
+                while (member_info[i][j][len] != '\0') {
+                    len++;
+                }
+                if (len > 0 && member_info[i][j][len - 1] == '\n') {
+                    member_info[i][j][len - 1] = '\0';
+                }
+            }
 
-        printf("8. 보조 스킬: ");
-        fgets(candidates[i].member_info[8], sizeof(candidates[i].member_info[8]), stdin);
-        remove_newline(candidates[i].member_info[8]);
+            j++;
+        }
 
-        printf("9. 한국어 등급(TOPIK): ");
-        fgets(candidates[i].member_info[9], sizeof(candidates[i].member_info[9]), stdin);
-        remove_newline(candidates[i].member_info[9]);
-
-        printf("10. MBTI: ");
-        fgets(candidates[i].member_info[10], sizeof(candidates[i].member_info[10]), stdin);
-        remove_newline(candidates[i].member_info[10]);
-
-        printf("11. 소개: ");
-        fgets(candidates[i].member_info[11], sizeof(candidates[i].member_info[11]), stdin);
-
-        printf("=================================\n");
-        i++;
+        // 성별 변환
+        if (member_info[i][2][0] == 'F') {
+            snprintf(member_info[i][2], sizeof(member_info[i][2]), "여");
+        } else if (member_info[i][2][0] == 'M') {
+            snprintf(member_info[i][2], sizeof(member_info[i][2]), "남");
+        }
     }
 
-    for (i = 0; i < NUM_CANDIDATES; i++) {
+    // 데이터 출력
+    for (int i = 0; i < NUM_CANDIDATES; i++) {
         printf("####################################\n");
-        printf("[%s] 오디션 후보자 데이터 조회\n", candidates[i].member_info[0]);
+        printf("[%s] 오디션 후보자 데이터 조회\n", candidates[i]);
         printf("####################################\n");
         printf("성   명 |  생   일  | 성 별 |       메   일      | 국적 | BMI | 주스킬 | 보조스킬 | TOPIK | MBTI |\n");
         printf("================================================================================================\n");
 
-        int age = calculate_age(candidates[i].member_info[2]);
+        // 생일에서 나이 계산
+        int birth_year, birth_month, birth_day;
+        sscanf(member_info[i][1], "%d/%d/%d", &birth_year, &birth_month, &birth_day);
+
+        // 현재 날짜를 __DATE__ 매크로로 가져옴
+        char current_date[12]; // "Mmm dd yyyy" 형식
+        snprintf(current_date, sizeof(current_date), "%s", __DATE__);
+
+        int current_year, current_month, current_day;
+        sscanf(current_date, "%*s %d %d", &current_day, &current_year);
+        current_month = 0; // 현재 월을 문자열에서 파싱
+        char *month_names[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        for (int j = 0; j < 12; j++) {
+            if (current_date[0] == month_names[j][0]) {
+                current_month = j + 1;
+                break;
+            }
+        }
+
+        // 나이 계산
+        int age = current_year - birth_year;
+        if (birth_month > current_month || (birth_month == current_month && birth_day > current_day)) {
+            age--;
+        }
 
         printf("%s(%d)  | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n",
-            candidates[i].member_info[1],
-            age,
-            candidates[i].member_info[2],
-            candidates[i].member_info[3],
-            candidates[i].member_info[4],
-            candidates[i].member_info[5],
-            candidates[i].member_info[6],
-            candidates[i].member_info[7],
-            candidates[i].member_info[8],
-            candidates[i].member_info[9],
-            candidates[i].member_info[10]
-        );
+            member_info[i][0], age, member_info[i][1], member_info[i][2], 
+            member_info[i][3], member_info[i][4], member_info[i][5], 
+            member_info[i][6], member_info[i][7], member_info[i][8], 
+            member_info[i][9]);
         printf("---------------------------------------------------------------------------------------------\n");
-        printf("%s", candidates[i].member_info[11]);
+        printf("%s\n", member_info[i][10]);
         printf("---------------------------------------------------------------------------------------------\n");
     }
-
     while (getchar() != '\n');
     getchar();
-
     return 0;
 }
