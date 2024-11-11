@@ -111,7 +111,6 @@ int main() {
         free(judges_array[i]);
     }
 
-    // 아무키나 눌러서 넘기기(콘솔 결과 확인용)
     while (getchar() != '\n');
     getchar();
 
